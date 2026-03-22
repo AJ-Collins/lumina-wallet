@@ -1,39 +1,88 @@
-**Welcome to your Base44 project** 
+# Lumina Wallet 💎
 
-**About**
+Lumina Wallet is a premium, non-custodial Solana wallet experience designed for speed, security, and elegance. Built with modern web technologies, it provides a seamless interface for managing your Solana assets with professional-grade tools.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+![Lumina Wallet Banner](https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=2000)
 
-This project contains everything you need to run your app locally.
+## ✨ Key Features
 
-**Edit the code in your local development environment**
+- **🚀 Dynamic Dashboard**: A unified view of your LBC balance, wallet address, and real-time transaction activity.
+- **🛡️ Non-Custodial Security**: 
+  - Industry-standard BIP39 seed phrase management.
+  - Secure "Unlock Wallet" flow for returning users.
+  - Full control over your private keys.
+- **💸 Native Send & Receive**: 
+  - Integrated QR code scanner for hassle-free transfers.
+  - Support for SPL tokens and native SOL.
+- **📊 Real-time Analytics**: Visualized performance and transaction history powered by Recharts.
+- **🎨 Premium UI/UX**: 
+  - Sleek dark mode by default.
+  - Fluid micro-animations with Framer Motion.
+  - Responsive layouts for all devices.
+- **🔌 DApp Integration**: Seamlessly connect to the Solana ecosystem via standard wallet protocols.
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+## 🛠️ Tech Stack
 
-**Prerequisites:** 
+- **Core**: [React 18](https://reactjs.org/), [Vite](https://vitejs.dev/)
+- **Blockchain**: [@solana/web3.js](https://solana-labs.github.io/solana-web3.js/), [@solana/wallet-adapter](https://github.com/solana-labs/wallet-adapter)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/), [Radix UI](https://www.radix-ui.com/), [Lucide Icons](https://lucide.dev/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Visualization**: [Recharts](https://recharts.org/)
+- **Validation**: [Zod](https://zod.dev/), [React Hook Form](https://react-hook-form.com/)
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+## 🚀 Getting Started
 
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/AJ-Collins/lumina-wallet.git
+   cd lumina-wallet
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   Create a `.env` file in the root directory and add your Solana RPC endpoint:
+   ```env
+   VITE_SOLANA_RPC_URL=your_rpc_endpoint_here
+   ```
+
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+## 🏗️ Project Structure
+
+```text
+src/
+├── components/     # Reusable UI components (shadcn/ui)
+│   ├── auth/       # Authentication (Unlock, Import, Recover)
+│   ├── wallet/     # Wallet-specific logic (Send, Receive, Settings)
+│   └── ui/         # Base UI primitives
+├── pages/          # Top-level page components (Dashboard, Auth)
+├── hooks/          # Custom React hooks
+├── lib/            # Utility libraries and configurations
+└── utils/          # Helper functions and formatting
 ```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
-```
+## 🔐 Security
 
-Run the app: `npm run dev`
+Lumina Wallet is a non-custodial application. Your private keys and seed phrases are encrypted and stored locally on your device. Never share your recovery phrase with anyone.
 
-**Publish your changes**
+## 📄 License
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-**Docs & Support**
+---
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+Built with ❤️ by the Lumina Team.
