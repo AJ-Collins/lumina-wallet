@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Phantom uses very deep, solid base colors (#111111 or #222222) */
+    --background: 225 15% 7%;
+    --foreground: 0 0% 98%;
+    /* Solid, slightly elevated card */
+    --card: 225 15% 11%;
+    --card-foreground: 0 0% 98%;
+    --popover: 225 15% 11%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 184 100% 50%;
+    --primary-foreground: 225 55% 5%;
+    --secondary: 306 100% 50%;
+    --secondary-foreground: 0 0% 95%;
+    --accent: 184 100% 50%;
+    --accent-foreground: 225 55% 5%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 225 15% 18%;
+    --input: 225 15% 18%;
+    --ring: 184 100% 50%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Design Utilities */
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#00F0FF] to-[#FF00E5] bg-clip-text text-transparent;
+  }
+
+  /* Sharp Phantom-styled panel */
+  .glass-panel {
+    @apply bg-card border border-border rounded-2xl shadow-lg;
+  }
+
+  /* Solid neon elements without excessive glowing */
+  .neon-glow-cyan {
+    @apply border border-[#00F0FF]/20 shadow-[0_4px_12px_rgba(0,0,0,0.5)];
+  }
+
+  .neon-glow-magenta {
+    @apply border border-[#FF00E5]/20 shadow-[0_4px_12px_rgba(0,0,0,0.5)];
+  }
+
+  /* Subtle ambient light instead of harsh bloom */
+  .orb-glow {
+    @apply absolute rounded-full blur-[120px] opacity-10 pointer-events-none mix-blend-screen;
+  }
+
+  /* Clean Scrollbars / Hidden */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
