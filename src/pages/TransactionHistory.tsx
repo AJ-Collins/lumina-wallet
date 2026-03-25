@@ -1,6 +1,19 @@
 import { ArrowUpRight, ArrowDownLeft, ExternalLink, History } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
 
-export default function TransactionHistory({ transactions }) {
+// Safe wrapper — returns {} if called outside an Outlet (e.g. when used as a sub-component)
+function useSafeOutletContext() {
+  try {
+    const ctx = useOutletContext<any>() ?? {};
+    return ctx;
+  } catch {
+    return {} as any;
+  }
+}
+
+export default function TransactionHistory({ transactions: propTransactions }: { transactions?: any[] }) {
+  const ctx = useSafeOutletContext();
+  const transactions = propTransactions ?? ctx?.history ?? [];
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
@@ -41,11 +54,10 @@ export default function TransactionHistory({ transactions }) {
             {/* Left: Icon & Details */}
             <div className="flex items-center gap-3 overflow-hidden">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center border shrink-0 ${
-                  tx.err
-                    ? 'bg-destructive/10 border-destructive/20 text-destructive'
-                    : 'bg-[#00F0FF]/10 border-[#00F0FF]/20 text-[#00F0FF]'
-                }`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center border shrink-0 ${tx.err
+                  ? 'bg-destructive/10 border-destructive/20 text-destructive'
+                  : 'bg-[#00F0FF]/10 border-[#00F0FF]/20 text-[#00F0FF]'
+                  }`}
               >
                 {tx.err ? (
                   <ArrowUpRight className="w-5 h-5" />
@@ -53,39 +65,39 @@ export default function TransactionHistory({ transactions }) {
                   <History className="w-5 h-5" />
                 )}
               </div>
- 
+
               <div className="flex flex-col min-w-0">
                 <p className="text-sm font-bold text-foreground truncate">
                   {tx.signature.slice(0, 8)}...{tx.signature.slice(-8)}
                 </p>
                 <div className="flex items-center gap-2">
-                    {tx.confirmationStatus === 'finalized' ? (
-                      <span className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-green-400">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-                        Confirmed
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-yellow-400">
-                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse inline-block" />
-                        Pending
-                      </span>
-                    )}
+                  {tx.confirmationStatus === 'finalized' ? (
+                    <span className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-green-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                      Confirmed
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-yellow-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse inline-block" />
+                      Pending
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
- 
+
             {/* Right: Amount & Date */}
             <div className="flex flex-col items-end shrink-0">
-              <div className="flex items-center gap-1 text-[#00F0FF] hover:text-[#FF00E5] cursor-pointer transition-colors" 
-                   onClick={() => window.open(`https://solana.fm/tx/${tx.signature}?cluster=devnet-solana`, '_blank')}>
+              <div className="flex items-center gap-1 text-[#00F0FF] hover:text-[#FF00E5] cursor-pointer transition-colors"
+                onClick={() => window.open(`https://solana.fm/tx/${tx.signature}?cluster=devnet-solana`, '_blank')}>
                 <span className="text-xs font-bold uppercase tracking-widest">Details</span>
                 <ExternalLink className="w-3 h-3" />
               </div>
-               <p className="text-xs text-muted-foreground mt-0.5">
-                  {formatDate(tx.blockTime * 1000)}
-                </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {formatDate(tx.blockTime * 1000)}
+              </p>
             </div>
-            
+
           </div>
         ))}
       </div>

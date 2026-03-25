@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI, userAPI } from './api';
 import bs58 from 'bs58';
 
-const isTokenExpired = (token) => {
+const isTokenExpired = (token?: string | null) => {
   if (!token) return true;
   try {
-    const payloadBase64 = token.split('.')[1];
+    const parts = token.split('.');
+    if (parts.length < 2) return true;
+    const payloadBase64 = parts[1];
     const decodedJson = atob(payloadBase64);
     const payload = JSON.parse(decodedJson);
     const exp = payload.exp;

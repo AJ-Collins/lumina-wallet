@@ -1,12 +1,12 @@
 const API_URL = import.meta.env.VITE_PUBLIC_API_URL;
 
-export const apiCall = async (endpoint, options = {}) => {
+export const apiCall = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_URL}${endpoint}`;
   const token = localStorage.getItem('authToken');
 
-  const headers = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
 
   if (token) {
@@ -31,16 +31,16 @@ export const apiCall = async (endpoint, options = {}) => {
 };
 
 export const authAPI = {
-  getChallenge: (address) =>
+  getChallenge: (address: string) =>
     apiCall(`/api/v1/auth/challenge?address=${address}`),
 
-  verify: (payload) =>
+  verify: (payload: any) =>
     apiCall('/api/v1/auth/verify', { method: 'POST', body: JSON.stringify(payload) }),
 
   logout: () =>
     apiCall('/api/v1/auth/logout', { method: 'POST', body: JSON.stringify({}) }),
 
-  recover: (payload) =>
+  recover: (payload: any) =>
     apiCall('/api/v1/auth/recover', { method: 'POST', body: JSON.stringify(payload) }),
 };
 
@@ -48,10 +48,10 @@ export const userAPI = {
   getMe: () =>
     apiCall('/api/v1/users/me'),
 
-  updateProfile: (data) =>
+  updateProfile: (data: any) =>
     apiCall('/api/v1/users/profile', { method: 'PUT', body: JSON.stringify(data) }),
 
-  updateSecurity: (data) =>
+  updateSecurity: (data: any) =>
     apiCall('/api/v1/users/security', { method: 'PUT', body: JSON.stringify(data) }),
 };
 
@@ -62,13 +62,13 @@ export const walletAPI = {
   getHistory: () =>
     apiCall('/api/v1/wallet/history'),
 
-  sendToken: (data) =>
+  sendToken: (data: unknown) =>
     apiCall('/api/v1/wallet/send', { method: 'POST', body: JSON.stringify(data) }),
 
-  confirmSend: (data) =>
+  confirmSend: (data: unknown) =>
     apiCall('/api/v1/wallet/confirm-send', { method: 'POST', body: JSON.stringify(data) }),
 
-  saveContact: (data) =>
+  saveContact: (data: unknown) =>
     apiCall('/api/v1/wallet/contacts', { method: 'POST', body: JSON.stringify(data) }),
 
   getContacts: () =>

@@ -57,7 +57,7 @@ export default function RecoverWallet() {
       return;
     }
 
-    const phrase = phraseWords.map(w => w.trim()).join(' ');
+    const phrase = phraseWords.map(w => w.trim().toLowerCase()).join(' ');
 
     if (!validateMnemonic(phrase)) {
       toast.error('Invalid recovery phrase — please check your words');

@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Search, ArrowRight, ArrowLeft, User, Wallet, Info, Loader2, QrCode } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
+import { Search, ArrowRight, ArrowLeft, User, Info, Loader2, QrCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { walletAPI } from '@/lib/api';
-import QRScanner from './QRScanner';
+import QRScanner from '../components/wallet/QRScanner';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { getAssociatedTokenAddress, createTransferInstruction, createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 
-export default function SendToken({ balance }) {
+
+export default function SendToken() {
+  const { balance } = useOutletContext<any>();
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const [step, setStep] = useState('recipient'); // 'recipient', 'amount'
@@ -111,7 +114,7 @@ export default function SendToken({ balance }) {
                   {recentContacts.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-8 opacity-40">
                       <User className="w-8 h-8 mb-2" />
-                      <p className="text-xs font-bold uppercase tracking-widest">No recent contacts</p>
+                      <p className="text-xs font-bold uppercase tracking-widest">No recent address</p>
                     </div>
                   ) : recentContacts.map((contact, i) => (
                     <button
@@ -124,8 +127,8 @@ export default function SendToken({ balance }) {
                           <contact.icon className="w-5 h-5 text-muted-foreground group-hover:text-[#00F0FF]" />
                         </div>
                         <div className="text-left">
-                          <p className="text-sm font-bold text-foreground">{contact.name}</p>
-                          <p className="text-xs font-mono text-muted-foreground mt-0.5">{contact.address}</p>
+                          <p className="text-sm font-bold text-foreground">{contact.name.slice(0, 8)}...{contact.name.slice(-8)}</p>
+                          <p className="text-xs font-mono text-muted-foreground mt-0.5">{contact.address.slice(0, 8)}...{contact.address.slice(-8)}</p>
                         </div>
                       </div>
                     </button>
@@ -250,7 +253,7 @@ export default function SendToken({ balance }) {
                         contactAddress: recipient,
                         name: `Contact ${recipient.slice(0, 4)}`
                       });
-                      
+
                       // Refresh contacts list quietly
                       walletAPI.getContacts()
                         .then(contacts => {

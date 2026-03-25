@@ -80,7 +80,7 @@ export default function ImportWallet() {
           toast.error('Please fill in all 12 words of your recovery phrase');
           return;
         }
-        const phrase = phraseWords.map(w => w.trim()).join(' ');
+        const phrase = phraseWords.map(w => w.trim().toLowerCase()).join(' ');
         if (!validateMnemonic(phrase)) {
           toast.error('Invalid recovery phrase — please check your words');
           return;
