@@ -30,10 +30,20 @@ export default function RecoverWallet() {
     const pastedData = e.clipboardData.getData('text');
     const words = pastedData.trim().split(/[\s,]+/);
     if (words.length > 0) {
-      const newPhraseWords = [...phraseWords];
+      // Provide exactly enough slots for the pasted length, max 24, minimum 12
+      const targetLength = words.length > 12 ? 24 : 12;
+      const newPhraseWords = Array(targetLength).fill('');
+      
+      // Copy existing words up to index, if they exist and are relevant
+      for(let i=0; i<targetLength; i++) {
+         if (i < phraseWords.length) {
+            newPhraseWords[i] = phraseWords[i];
+         }
+      }
+      
       let wordIndex = 0;
-      for (let i = index; i < 12 && wordIndex < words.length; i++) {
-         newPhraseWords[i] = words[wordIndex];
+      for (let i = index; i < targetLength && wordIndex < words.length; i++) {
+         newPhraseWords[i] = words[wordIndex].replace(/[^a-zA-Z]/g, '').toLowerCase();
          wordIndex++;
       }
       setPhraseWords(newPhraseWords);
@@ -46,9 +56,17 @@ export default function RecoverWallet() {
     setPhraseWords(newWords);
   };
 
+  const togglePhraseLength = () => {
+    if (phraseWords.length === 12) {
+      setPhraseWords([...phraseWords, ...Array(12).fill('')]);
+    } else {
+      setPhraseWords(phraseWords.slice(0, 12));
+    }
+  };
+
   const handleRecover = async () => {
     if (phraseWords.some(w => !w.trim())) {
-      toast.error('Please fill in all 12 words of your recovery phrase');
+      toast.error(`Please fill in all ${phraseWords.length} words of your recovery phrase`);
       return;
     }
 
@@ -57,10 +75,10 @@ export default function RecoverWallet() {
       return;
     }
 
-    const phrase = phraseWords.map(w => w.trim().toLowerCase()).join(' ');
+    const phrase = phraseWords.map(w => w.replace(/[^a-zA-Z]/g, '').toLowerCase()).join(' ');
 
     if (!validateMnemonic(phrase)) {
-      toast.error('Invalid recovery phrase — please check your words');
+      toast.error('Invalid recovery phrase — please check your words. Ensure they match exactly natively.');
       return;
     }
 
@@ -96,9 +114,14 @@ export default function RecoverWallet() {
            <p className="text-xs text-amber-500 font-bold uppercase tracking-widest">Recover Existing Wallet</p>
         </div>
         
-        <p className="text-xs text-muted-foreground mb-4">
-          Enter your 12-word recovery phrase to regain access to your wallet and assets.
-        </p>
+        <div className="flex items-center justify-between mb-4">
+           <p className="text-xs text-muted-foreground">
+             Enter your {phraseWords.length}-word recovery phrase to regain access to your wallet and assets.
+           </p>
+           <button onClick={togglePhraseLength} className="text-xs font-bold text-[#FF00E5] hover:underline whitespace-nowrap ml-4 transition-all">
+             Use {phraseWords.length === 12 ? '24' : '12'} Words instead
+           </button>
+        </div>
 
         <div className="grid grid-cols-3 gap-3">
            {phraseWords.map((word, i) => (

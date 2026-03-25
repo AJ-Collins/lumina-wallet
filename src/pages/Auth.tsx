@@ -34,9 +34,9 @@ export default function Auth() {
       {/* Main Solid Panel */}
       <div className="w-full max-w-md p-8 bg-card border border-border shadow-2xl rounded-2xl relative z-10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-background border border-border mb-6 neon-glow-magenta relative overflow-hidden">
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-background border border-border mb-6 neon-glow-magenta relative overflow-hidden">
             <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#00F0FF] border-b-[#FF00E5] animate-[spin_4s_linear_infinite]"></div>
-            <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#00F0FF] to-[#FF00E5]"></div>
+            <img src="/lbc_logo.png" alt="LBC Logo" className="w-20 h-20 object-contain z-10" />
           </div>
           <h1 className="text-4xl font-black mb-1 tracking-wider text-foreground">
             NETWORK

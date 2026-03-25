@@ -8,23 +8,21 @@ import { LogOut, LayoutDashboard, Send, ArrowDownToLine, History, Settings, Menu
 import { toast } from 'sonner';
 
 const navItems = [
-  { label: 'Overview',      path: '/dashboard',      icon: LayoutDashboard },
-  { label: 'Send',          path: '/send',            icon: Send            },
-  { label: 'Receive',       path: '/receive',         icon: ArrowDownToLine },
-  { label: 'Transactions',  path: '/transactions',    icon: History         },
-  { label: 'Settings',      path: '/settings',        icon: Settings        },
+  { label: 'Overview', path: '/dashboard', icon: LayoutDashboard },
+  { label: 'Send', path: '/send', icon: Send },
+  { label: 'Receive', path: '/receive', icon: ArrowDownToLine },
+  { label: 'Transactions', path: '/transactions', icon: History },
+  { label: 'Settings', path: '/settings', icon: Settings },
 ];
 
 const navLinkClass = ({ isActive }) =>
-  `w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-colors font-bold tracking-wide ${
-    isActive
-      ? 'bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/20 shadow-sm'
-      : 'text-muted-foreground hover:bg-background hover:text-foreground'
+  `w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-colors font-bold tracking-wide ${isActive
+    ? 'bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/20 shadow-sm'
+    : 'text-muted-foreground hover:bg-background hover:text-foreground'
   }`;
 
 const mobileNavLinkClass = ({ isActive }) =>
-  `flex flex-col items-center justify-center py-3 w-full transition-all ${
-    isActive ? 'text-[#00F0FF]' : 'text-muted-foreground hover:text-foreground'
+  `flex flex-col items-center justify-center py-3 w-full transition-all ${isActive ? 'text-[#00F0FF]' : 'text-muted-foreground hover:text-foreground'
   }`;
 
 export default function Dashboard() {
@@ -82,15 +80,15 @@ export default function Dashboard() {
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center neon-glow-magenta relative overflow-hidden">
             <div className="absolute inset-0 rounded-full border border-transparent border-t-[#00F0FF] border-b-[#FF00E5] animate-[spin_4s_linear_infinite]" />
-            <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-[#00F0FF] to-[#FF00E5]" />
+            <img src="/lbc_logo.png" alt="LBC Logo" className="w-6 h-6 object-contain z-10" />
           </div>
-          <span className="font-black tracking-widest text-foreground uppercase">LBC</span>
+          <span className="font-black tracking-widest text-foreground uppercase">LBC LUMINA</span>
         </div>
         <div className="flex items-center gap-2">
           <NavLink to="/notifications">
             <Button variant="ghost" size="icon" className="text-muted-foreground relative">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF00E5] animate-ping" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF00E5]" />
               <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF00E5]" />
             </Button>
           </NavLink>
@@ -105,9 +103,9 @@ export default function Dashboard() {
 
         {/* Logo */}
         <div className="hidden md:flex items-center gap-3 p-6 border-b border-border shrink-0">
-          <div className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center neon-glow-magenta relative overflow-hidden shrink-0">
+          <div className="w-12 h-12 rounded-full bg-background border border-border flex items-center justify-center neon-glow-magenta relative overflow-hidden shrink-0">
             <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#00F0FF] border-b-[#FF00E5] animate-[spin_4s_linear_infinite]" />
-            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00F0FF] to-[#FF00E5]" />
+            <img src="/lbc_logo.png" alt="LBC Logo" className="w-10 h-10 object-contain z-10" />
           </div>
           <span className="text-xl font-black tracking-widest text-foreground uppercase">LBC LUMINA</span>
         </div>

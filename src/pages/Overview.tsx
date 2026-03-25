@@ -61,7 +61,7 @@ export default function Overview() {
                 onClick={copyAddress}
                 className="mt-3 flex items-center gap-2 bg-background border border-border hover:border-[#00F0FF]/40 rounded-full px-3 py-1.5 transition-colors group"
               >
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
                 <code className="text-xs font-mono text-muted-foreground group-hover:text-foreground transition-colors">
                   {user?.walletAddress?.slice(0, 6)}...{user?.walletAddress?.slice(-6)}
                 </code>

@@ -38,11 +38,19 @@ export default function ImportWallet() {
     const pastedData = e.clipboardData.getData('text');
     const words = pastedData.trim().split(/[\s,]+/);
     if (words.length > 0) {
-      const newPhraseWords = [...phraseWords];
+      const targetLength = words.length > 12 ? 24 : 12;
+      const newPhraseWords = Array(targetLength).fill('');
+
+      for (let i = 0; i < targetLength; i++) {
+        if (i < phraseWords.length) {
+          newPhraseWords[i] = phraseWords[i];
+        }
+      }
+
       let wordIndex = 0;
-      for (let i = index; i < 12 && wordIndex < words.length; i++) {
-         newPhraseWords[i] = words[wordIndex];
-         wordIndex++;
+      for (let i = index; i < targetLength && wordIndex < words.length; i++) {
+        newPhraseWords[i] = words[wordIndex].replace(/[^a-zA-Z]/g, '').toLowerCase();
+        wordIndex++;
       }
       setPhraseWords(newPhraseWords);
     }
@@ -77,12 +85,12 @@ export default function ImportWallet() {
         sessionStorage.removeItem('walletMnemonic');
       } else {
         if (phraseWords.some(w => !w.trim())) {
-          toast.error('Please fill in all 12 words of your recovery phrase');
+          toast.error(`Please fill in all ${phraseWords.length} words of your recovery phrase`);
           return;
         }
-        const phrase = phraseWords.map(w => w.trim().toLowerCase()).join(' ');
+        const phrase = phraseWords.map(w => w.replace(/[^a-zA-Z]/g, '').toLowerCase()).join(' ');
         if (!validateMnemonic(phrase)) {
-          toast.error('Invalid recovery phrase — please check your words');
+          toast.error('Invalid recovery phrase — please check your words. Ensure they match exactly natively.');
           return;
         }
         keypair = keypairFromMnemonic(phrase);
@@ -109,8 +117,8 @@ export default function ImportWallet() {
   };
 
   const isFormValid = (importType === 'privateKey'
-      ? privateKey.trim().length > 0
-      : phraseWords.every(w => w.trim().length > 0)) && password.length >= 6;
+    ? privateKey.trim().length > 0
+    : phraseWords.every(w => w.trim().length > 0)) && password.length >= 6;
 
   return (
     <div className="space-y-6">
@@ -118,21 +126,19 @@ export default function ImportWallet() {
       <div className="grid grid-cols-2 gap-2 bg-background border border-border rounded-xl p-1 shadow-inner">
         <button
           onClick={() => setImportType('phrase')}
-          className={`py-3 px-3 rounded-lg text-xs font-bold transition-all uppercase tracking-widest ${
-            importType === 'phrase'
+          className={`py-3 px-3 rounded-lg text-xs font-bold transition-all uppercase tracking-widest ${importType === 'phrase'
               ? 'bg-card text-[#00F0FF] shadow-sm border border-border'
               : 'text-muted-foreground hover:text-foreground border border-transparent'
-          }`}
+            }`}
         >
           Recovery Phrase
         </button>
         <button
           onClick={() => setImportType('privateKey')}
-          className={`py-3 px-3 rounded-lg text-xs font-bold transition-all uppercase tracking-widest ${
-            importType === 'privateKey'
+          className={`py-3 px-3 rounded-lg text-xs font-bold transition-all uppercase tracking-widest ${importType === 'privateKey'
               ? 'bg-card text-[#FF00E5] shadow-sm border border-border'
               : 'text-muted-foreground hover:text-foreground border border-transparent'
-          }`}
+            }`}
         >
           Private Key
         </button>
@@ -157,30 +163,35 @@ export default function ImportWallet() {
           </div>
         ) : (
           <div className="space-y-4">
-             <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse"></div>
-                <p className="text-xs text-[#00F0FF] font-bold uppercase tracking-widest">12-Word Secret Phrase</p>
-             </div>
-             
-             <div className="grid grid-cols-3 gap-3">
-               {phraseWords.map((word, i) => (
-                 <div key={i} className="relative flex items-center">
-                   <span className="absolute left-3 text-[10px] text-muted-foreground font-mono pointer-events-none select-none">{i + 1}.</span>
-                   <input
-                     type="text"
-                     value={word}
-                     onChange={(e) => handleWordChange(e.target.value, i)}
-                     onPaste={(e) => handlePaste(e, i)}
-                     className="w-full bg-background border border-border rounded-lg py-2.5 pl-8 pr-2 text-foreground font-mono text-xs font-bold focus:outline-none focus:border-[#00F0FF]/50 focus:ring-1 focus:ring-[#00F0FF]/50 transition-colors shadow-sm"
-                     autoComplete="off"
-                     autoCorrect="off"
-                     autoCapitalize="off"
-                     spellCheck="false"
-                   />
-                 </div>
-               ))}
-             </div>
-             <p className="text-xs text-muted-foreground mt-4 text-center">Paste anywhere in the inputs to auto-fill all 12 words.</p>
+                <p className="text-xs text-[#00F0FF] font-bold uppercase tracking-widest">{phraseWords.length}-Word Secret Phrase</p>
+              </div>
+              <button onClick={() => setPhraseWords(phraseWords.length === 12 ? [...phraseWords, ...Array(12).fill('')] : phraseWords.slice(0, 12))} className="text-xs font-bold text-[#FF00E5] hover:underline whitespace-nowrap ml-4 transition-all">
+                Use {phraseWords.length === 12 ? '24' : '12'} Words instead
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              {phraseWords.map((word, i) => (
+                <div key={i} className="relative flex items-center">
+                  <span className="absolute left-3 text-[10px] text-muted-foreground font-mono pointer-events-none select-none">{i + 1}.</span>
+                  <input
+                    type="text"
+                    value={word}
+                    onChange={(e) => handleWordChange(e.target.value, i)}
+                    onPaste={(e) => handlePaste(e, i)}
+                    className="w-full bg-background border border-border rounded-lg py-2.5 pl-8 pr-2 text-foreground font-mono text-xs font-bold focus:outline-none focus:border-[#00F0FF]/50 focus:ring-1 focus:ring-[#00F0FF]/50 transition-colors shadow-sm"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck="false"
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground mt-4 text-center">Paste anywhere in the inputs to auto-fill all 12 words.</p>
           </div>
         )}
       </div>
@@ -205,9 +216,8 @@ export default function ImportWallet() {
       <Button
         onClick={handleImport}
         disabled={importing || !isFormValid}
-        className={`w-full text-background font-black py-6 rounded-xl transition-all disabled:opacity-50 border-none text-base ${
-           importType === 'phrase' ? 'bg-[#00F0FF] hover:bg-[#00F0FF]/90' : 'bg-[#FF00E5] hover:bg-[#FF00E5]/90'
-        }`}
+        className={`w-full text-background font-black py-6 rounded-xl transition-all disabled:opacity-50 border-none text-base ${importType === 'phrase' ? 'bg-[#00F0FF] hover:bg-[#00F0FF]/90' : 'bg-[#FF00E5] hover:bg-[#FF00E5]/90'
+          }`}
       >
         {importing ? (
           <>
